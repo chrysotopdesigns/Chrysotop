@@ -145,25 +145,25 @@ const BUDGETS = [
     value: 'starter',
     label: 'Starter',
     desc: 'A focused, well-built single-page or small site that does one job properly.',
-    amount: 'Up to {C}50,000',
+    amount: 'Up to {C}500',
   },
   {
     value: 'professional',
     label: 'Professional',
     desc: 'A custom multi-page website designed around your business and its goals.',
-    amount: '{C}50,000 – 120,000',
+    amount: '{C}500 – 1200',
   },
   {
     value: 'advanced',
     label: 'Advanced',
     desc: 'Custom design plus the features that do real work — booking, commerce, integrations.',
-    amount: '{C}120,000 – 300,000',
+    amount: '{C}1200 – 3000',
   },
   {
     value: 'custom',
     label: 'Complex project',
     desc: 'Large scope: memberships, stores with many products, multi-location or bespoke systems.',
-    amount: '{C}300,000+',
+    amount: '{C}3000+',
   },
 ];
 
@@ -210,7 +210,7 @@ export const STEPS = [
       {
         name: 'client_name', label: 'What is your name?', type: 'text',
         required: true, autocomplete: 'name', maxlength: 80,
-        placeholder: 'e.g. Amina Wanjiru',
+        placeholder: 'e.g. Phil Jones',
       },
       {
         name: 'business_name', label: 'What is your business or company called?', type: 'text',
@@ -612,7 +612,7 @@ export const STEPS = [
       },
       {
         name: 'phone', label: 'Phone number', type: 'tel',
-        required: true, autocomplete: 'tel', maxlength: 40, inputmode: 'tel',
+        required: false, optional: true, autocomplete: 'tel', maxlength: 40, inputmode: 'tel',
         placeholder: '+254 700 000 000',
       },
       {
