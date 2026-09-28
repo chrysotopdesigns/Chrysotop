@@ -1,0 +1,92 @@
+# ============================================================================
+# Chrysotop Designs — Netlify configuration
+# ----------------------------------------------------------------------------
+# This file is the single source of truth for how Netlify builds and serves
+# the site. Keeping it in version control means every setting is reviewable,
+# rollback-able, and identical for everyone working on the project — rather
+# than living in a dashboard click that nobody can audit later.
+#
+# Local development parity: run `netlify dev` (see README § 1) and Netlify
+# emulates the redirects, headers and form handling defined below.
+# ============================================================================
+
+[build]
+  # The site is plain HTML/CSS/JS with no build step, so the repository root
+  # is both the source and the published output. Nothing is generated, which
+  # keeps deploys fast and the failure surface small.
+  publish = "."
+
+# ---------------------------------------------------------------------------
+# Environment
+# ---------------------------------------------------------------------------
+[build.environment]
+  NODE_VERSION = "20"
+
+# ---------------------------------------------------------------------------
+# Security headers
+# ---------------------------------------------------------------------------
+# Notes on the Content-Security-Policy:
+#   • 'unsafe-inline' is permitted for STYLE only (not SCRIPT), because the
+#     design sets a small number of inline custom properties. If you would
+#     rather avoid it entirely, move those few values into styles.css classes.
+#   • script-src has NO 'unsafe-inline', so any injected <script> is blocked.
+#   • frame-ancestors 'none' plus X-Frame-Options DENY prevents the brief from
+#     being framed by a third party (clickjacking).
+#   • form-action is limited to the site itself and Netlify's form endpoint.
+# ---------------------------------------------------------------------------
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options    = "nosniff"
+    X-Frame-Options           = "DENY"
+    Referrer-Policy           = "strict-origin-when-cross-origin"
+    Permissions-Policy        = "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    Cross-Origin-Opener-Policy = "same-origin"
+    Content-Security-Policy   = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; upgrade-insecure-requests"
+
+# Immutable caching for fingerprinted-free static assets in /assets.
+# These filenames are stable, so use a long max-age but allow revalidation.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, must-revalidate"
+
+# The HTML shell and the JS/CSS must revalidate so a deploy takes effect
+# immediately rather than serving a stale page from a CDN edge.
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/styles.css"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# ---------------------------------------------------------------------------
+# Redirects
+# ---------------------------------------------------------------------------
+# OPTIONAL — canonical host.
+#
+# Enable this ONLY after you have connected BOTH the apex domain and its www
+# variant in Netlify. If www is not also attached, this rule sends visitors to
+# a hostname that does not resolve, and the site appears to be down.
+#
+# To switch the canonical host to www instead, swap the two hostnames.
+#
+# [[redirects]]
+#   from = "https://www.chrysotopdesigns.com/*"
+#   to = "https://chrysotopdesigns.com/:splat"
+#   status = 301
+#   force = true
+#
+# NOTE: there is deliberately no catch-all `/* → /index.html` rewrite here.
+# A catch-all would also capture requests for missing assets and masked the
+# real 404 behaviour. Netlify serves /404.html automatically for any path
+# that does not exist, which is the correct approach for a static site.

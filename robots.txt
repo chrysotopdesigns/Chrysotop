@@ -1,0 +1,12 @@
+# Chrysotop Designs — robots.txt
+# The brief itself is a private interaction; the marketing page is public.
+
+User-agent: *
+Allow: /
+Disallow: /404.html
+
+# Do not index the thank-you/confirmation state or any query variants
+Disallow: /*?sent=
+Disallow: /*?*
+
+Sitemap: https://chrysotopdesigns.com/sitemap.xml

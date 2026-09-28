@@ -1,0 +1,36 @@
+{
+  "name": "chrysotop-designs",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Chrysotop Designs — interactive website discovery and project briefing experience.",
+  "type": "module",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "npx --yes serve@14 . -l 8080",
+    "dev:netlify": "netlify dev",
+    "start": "npm run dev",
+
+    "fields:sync": "node tools/sync-netlify-fields.mjs",
+    "fields:check": "node tools/sync-netlify-fields.mjs --check",
+
+    "test": "npm run fields:check && npm run test:validation && npm run verify",
+    "test:e2e": "node tools/e2e-brief.mjs",
+    "test:deploy": "node tools/test-deploy.mjs",
+    "test:validation": "node tools/test-validation.mjs",
+
+    "verify": "node tools/verify.mjs",
+    "audit:all": "npm run test && npm run test:e2e && npm run test:deploy"
+  },
+  "devDependencies": {
+    "playwright": "^1.47.0"
+  },
+  "keywords": [
+    "chrysotop-designs",
+    "website-brief",
+    "netlify-forms",
+    "website-design"
+  ]
+}
